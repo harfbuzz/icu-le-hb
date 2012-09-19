@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: icu-le
+Description: ICU Layout Engine API on top of HarfBuzz shaping library
+Version: @VERSION@
+Requires: icu-uc
+Requires.private: harfbuzz
+Libs: -L${libdir} -licule
+Cflags: -I${includedir}
