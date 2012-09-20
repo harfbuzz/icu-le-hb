@@ -158,34 +158,68 @@ le_int32 LayoutEngine::getGlyphCount() const
 
 void LayoutEngine::getCharIndices(le_int32 charIndices[], le_int32 indexBase, LEErrorCode &success) const
 {
-    //TODO fGlyphStorage->getCharIndices(charIndices, indexBase, success);
+  if (LE_FAILURE (success)) return;
+  unsigned int count;
+  const hb_glyph_info_t *info = hb_buffer_get_glyph_infos (fHbBuffer, &count);
+  for (unsigned int i = 0; i < count; i++)
+    charIndices[i] = info[i].cluster + indexBase;
 }
 
 void LayoutEngine::getCharIndices(le_int32 charIndices[], LEErrorCode &success) const
 {
-    //TODO fGlyphStorage->getCharIndices(charIndices, success);
+  if (LE_FAILURE (success)) return;
+  unsigned int count;
+  const hb_glyph_info_t *info = hb_buffer_get_glyph_infos (fHbBuffer, &count);
+  for (unsigned int i = 0; i < count; i++)
+    charIndices[i] = info[i].cluster;
 }
 
 // Copy the glyphs into caller's (32-bit) glyph array, OR in extraBits
 void LayoutEngine::getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const
 {
-    //TODO fGlyphStorage->getGlyphs(glyphs, extraBits, success);
+  if (LE_FAILURE (success)) return;
+  unsigned int count;
+  const hb_glyph_info_t *info = hb_buffer_get_glyph_infos (fHbBuffer, &count);
+  for (unsigned int i = 0; i < count; i++)
+    glyphs[i] = info[i].codepoint | extraBits;
 }
 
 void LayoutEngine::getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const
 {
-    //TODO fGlyphStorage->getGlyphs(glyphs, success);
+  if (LE_FAILURE (success)) return;
+  unsigned int count;
+  const hb_glyph_info_t *info = hb_buffer_get_glyph_infos (fHbBuffer, &count);
+  for (unsigned int i = 0; i < count; i++)
+    glyphs[i] = info[i].codepoint;
 }
 
 
 void LayoutEngine::getGlyphPositions(float positions[], LEErrorCode &success) const
 {
-    //TODO fGlyphStorage->getGlyphPositions(positions, success);
+  if (LE_FAILURE (success)) return;
+  unsigned int count;
+  const hb_glyph_position_t *pos = hb_buffer_get_glyph_positions (fHbBuffer, &count);
+  float x = 0, y = 0;
+  for (unsigned int i = 0; i < count; i++) {
+    positions[2 * i]     = x + pos[i].x_offset;
+    positions[2 * i + 1] = y + pos[i].y_offset;
+    x += pos[i].x_advance;
+    y += pos[i].y_advance;
+  }
 }
 
 void LayoutEngine::getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const
 {
-    //TODO fGlyphStorage->getGlyphPosition(glyphIndex, x, y, success);
+  if (LE_FAILURE (success)) return;
+  unsigned int count;
+  const hb_glyph_position_t *pos = hb_buffer_get_glyph_positions (fHbBuffer, &count);
+  x = 0; y = 0;
+  for (unsigned int i = 0; i < (unsigned int) glyphIndex; i++) {
+    x += pos[i].x_advance;
+    y += pos[i].y_advance;
+  }
+  x += pos[glyphIndex].x_offset;
+  y += pos[glyphIndex].y_offset;
 }
 
 // Input: characters, font?
