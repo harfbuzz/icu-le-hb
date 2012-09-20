@@ -165,6 +165,9 @@ public:
      */
     virtual const void *getFontTable(LETag tableTag) const = 0;
 
+    /* New in icu-le-hb. Safe version of getFontTable(). */
+    virtual const void* getFontTable(LETag tableTag, size_t &length) const { length=-1; return getFontTable(tableTag); }  /* -1 = unknown length */
+
     /**
      * This method is used to determine if the font can
      * render the given character. This can usually be done

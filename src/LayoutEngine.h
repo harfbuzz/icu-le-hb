@@ -7,14 +7,13 @@
 
 #include "LETypes.h"
 
-/**
- * \file 
- * \brief C++ API: Virtual base class for complex text layout.
- */
+struct hb_font_t;
+struct hb_buffer_t;
 
 U_NAMESPACE_BEGIN
 
 class LEFontInstance;
+
 
 /**
  * This is a virtual base class used to do complex text layout. The text must all
@@ -68,40 +67,13 @@ public:
     static const le_int32 kTypoFlagLiga;
 #endif  /* U_HIDE_INTERNAL_API */
 
-protected:
+private:
 
-    /**
-     * The script code for the text
-     *
-     * @see ScriptAndLanguageTags.h for script codes.
-     *
-     * @internal
-     */
-    le_int32 fScriptCode;
+   hb_font_t *fHbFont;
 
-    /**
-     * The langauge code for the text
-     *
-     * @see ScriptAndLanguageTags.h for language codes.
-     *
-     * @internal
-     */
-    le_int32 fLanguageCode;
+   hb_buffer_t *fHbBuffer;
 
-    /**
-     * The typographic control flags
-     *
-     * @internal
-     */
     le_int32 fTypoFlags;
-
-    /**
-     * <code>TRUE</code> if <code>mapCharsToGlyphs</code> should replace ZWJ / ZWNJ with a glyph
-     * with no contours.
-     *
-     * @internal
-     */
-    le_bool fFilterZeroWidth;
 
 #ifndef U_HIDE_INTERNAL_API
     /**
