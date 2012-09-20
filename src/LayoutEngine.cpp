@@ -203,19 +203,13 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
         return 0;
     }
 
-    le_int32 glyphCount;
-
     hb_buffer_set_length (fHbBuffer, 0);
     hb_buffer_set_direction (fHbBuffer, rightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR);
+    hb_buffer_add_utf16 (fHbBuffer, chars, max, offset, count);
 
-#if 0
-    glyphCount = computeGlyphs(chars, offset, count, max, rightToLeft, *fGlyphStorage, success);
-    positionGlyphs(*fGlyphStorage, x, y, success);
-    adjustGlyphPositions(chars, offset, count, rightToLeft, *fGlyphStorage, success);
-#endif
-    /* XXXXXXXXXXXXX beef goes here. */
+    hb_shape (fHbFont, fHbBuffer, NULL, 0);
 
-    return glyphCount;
+    return hb_buffer_get_length (fHbBuffer);
 }
 
 void LayoutEngine::reset()
