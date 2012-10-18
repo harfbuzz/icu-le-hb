@@ -28,10 +28,11 @@ libicule_la_LIBADD = \
 
 libicule_la_SOURCES = \
 	$(include_HEADERS) \
-	LayoutEngine.cpp
-	LEFontInstance.cpp
-	LEGlyphStorage.cpp
-	loengine.cpp
+	LayoutEngine.cpp \
+	LEFontInstance.cpp \
+	LEGlyphStorage.cpp \
+	LEInsertionList.cpp \
+	loengine.cpp \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
