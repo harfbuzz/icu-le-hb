@@ -1,7 +1,8 @@
 
 NULL =
 
-pkginclude_HEADERS = \
+layoutincludedir = $(pkgincludedir)/layout
+layoutinclude_HEADERS = \
 	LayoutEngine.h \
 	LEFontInstance.h \
 	LEGlyphFilter.h \
