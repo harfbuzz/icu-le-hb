@@ -1,0 +1,4 @@
+Name: icu-le
+Description: ICU Layout Engine API on top of HarfBuzz shaping library
+Version: 50.0.0
+Requires: icu-le-hb

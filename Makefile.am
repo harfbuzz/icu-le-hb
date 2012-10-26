@@ -19,6 +19,6 @@ EXTRA_DIST = autogen.sh
 SUBDIRS = src
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = icu-le.pc
+pkgconfig_DATA = icu-le-hb.pc icu-le.pc
 
 -include $(top_srcdir)/git.mk
