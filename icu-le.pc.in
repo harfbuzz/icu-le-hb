@@ -9,4 +9,4 @@ Version: @VERSION@
 Requires: icu-uc
 Requires.private: harfbuzz
 Libs: -L${libdir} -licu-le-hb
-Cflags: -I${includedir}
+Cflags: -I${includedir}/icu-le-hb

@@ -1,7 +1,7 @@
 
 NULL =
 
-include_HEADERS = \
+pkginclude_HEADERS = \
 	LayoutEngine.h \
 	LEFontInstance.h \
 	LEGlyphFilter.h \
