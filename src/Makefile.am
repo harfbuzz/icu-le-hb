@@ -14,19 +14,19 @@ include_HEADERS = \
 	loengine.h \
 	$(NULL)
 
-lib_LTLIBRARIES = libicule.la
+lib_LTLIBRARIES = libicu-le-hb.la
 
-libicule_la_LDFLAGS =
-libicule_la_CPPFLAGS = \
+libicu_le_hb_la_LDFLAGS =
+libicu_le_hb_la_CPPFLAGS = \
 	$(HARFBUZZ_CFLAGS) \
 	$(ICU_CFLAGS) \
 	$(NULL)
-libicule_la_LIBADD = \
+libicu_le_hb_la_LIBADD = \
 	$(HARFBUZZ_LIBS) \
 	$(ICU_LIBS) \
 	$(NULL)
 
-libicule_la_SOURCES = \
+libicu_le_hb_la_SOURCES = \
 	$(include_HEADERS) \
 	LayoutEngine.cpp \
 	LEFontInstance.cpp \
