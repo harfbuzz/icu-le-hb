@@ -14,7 +14,7 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/mkinstalldirs \
 	`find "$(srcdir)" -type f -name Makefile.in -print`
 
-EXTRA_DIST = autogen.sh
+EXTRA_DIST = autogen.sh icu-le.pc
 
 SUBDIRS = src
 
