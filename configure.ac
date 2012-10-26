@@ -3,7 +3,7 @@ AC_PREREQ(2.56)
 
 AC_INIT(icu-le-hb, 0.0.0)
 
-AC_CONFIG_SRCDIR([icu-le.pc.in])
+AC_CONFIG_SRCDIR([icu-le-hb.pc.in])
 
 AM_INIT_AUTOMAKE(1.9)
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
@@ -16,7 +16,7 @@ PKG_CHECK_MODULES(HARFBUZZ, harfbuzz)
 PKG_CHECK_MODULES(ICU, icu-uc)
 
 AC_CONFIG_FILES([
-icu-le.pc
+icu-le-hb.pc
 Makefile
 src/Makefile
 ])
