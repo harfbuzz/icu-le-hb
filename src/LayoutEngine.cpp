@@ -63,7 +63,7 @@ icu_le_hb_font_get_glyph_h_advance (hb_font_t *font,
 
   fontInstance->getGlyphAdvance (glyph, advance);
 
-  return advance.fY;
+  return advance.fX;
 }
 
 static hb_bool_t
