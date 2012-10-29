@@ -140,8 +140,8 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
     }
     hb_font_set_funcs (fHbFont, icu_le_hb_get_font_funcs (), (void *) fontInstance, NULL);
     hb_font_set_scale (fHbFont,
-		       fontInstance->getScaleFactorX (),
-		       fontInstance->getScaleFactorY ());
+		       +fontInstance->getXPixelsPerEm () * fontInstance->getScaleFactorX (),
+		       -fontInstance->getYPixelsPerEm () * fontInstance->getScaleFactorY ());
     hb_font_set_ppem (fHbFont,
 		      fontInstance->getXPixelsPerEm (),
 		      fontInstance->getYPixelsPerEm ());
