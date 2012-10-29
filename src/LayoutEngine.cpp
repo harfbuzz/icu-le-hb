@@ -15,6 +15,8 @@
 #include <hb.h>
 #include <hb-icu.h>
 
+#include "math.h"
+
 U_NAMESPACE_BEGIN
 
 /* Leave this copyright notice here! It needs to go somewhere in this library. */
@@ -28,13 +30,13 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LayoutEngine)
 static inline float
 to_float (hb_position_t v)
 {
-  return v;
+  return scalblnf (v, -8);
 }
 
 static inline hb_position_t
 from_float (float v)
 {
-  return v;
+  return scalblnf (v, +8);
 }
 
 
