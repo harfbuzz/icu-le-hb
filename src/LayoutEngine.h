@@ -16,7 +16,7 @@ class LEFontInstance;
 
 
 /**
- * This is a virtual base class used to do complex text layout. The text must all
+ * This is a class used to do complex text layout. The text must all
  * be in a single font, script, and language. An instance of a LayoutEngine can be
  * created by calling the layoutEngineFactory method. Fonts are identified by
  * instances of the LEFontInstance class. Script and language codes are identified
@@ -31,27 +31,6 @@ class LEFontInstance;
  * These arrays are protected members of LayoutEngine which can be retreived by a
  * public method. The reset method can be called to free these arrays so that the
  * LayoutEngine can be reused.
- *
- * The layout process is done in three steps. There is a protected virtual method
- * for each step. These methods have a default implementation which only does
- * character to glyph mapping and default positioning using the glyph's advance
- * widths. Subclasses can override these methods for more advanced layout.
- * There is a public method which invokes the steps in the correct order.
- * 
- * The steps are:
- *
- * 1) Glyph processing - character to glyph mapping and any other glyph processing
- *    such as ligature substitution and contextual forms.
- *
- * 2) Glyph positioning - position the glyphs based on their advance widths.
- *
- * 3) Glyph position adjustments - adjustment of glyph positions for kerning,
- *    accent placement, etc.
- *
- * NOTE: in all methods below, output parameters are references to pointers so
- * the method can allocate and free the storage as needed. All storage allocated
- * in this way is owned by the object which created it, and will be freed when it
- * is no longer needed, or when the object's destructor is invoked.
  *
  * @see LEFontInstance
  * @see ScriptAndLanguageTags.h
@@ -114,8 +93,7 @@ public:
     /**
      * The destructor. It will free any storage allocated for the
      * glyph, character index and position arrays by calling the reset
-     * method. It is declared virtual so that it will be invoked by the
-     * subclass destructors.
+     * method.
      *
      * @stable ICU 2.8
      */
@@ -146,7 +124,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    virtual le_int32 layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, float x, float y, LEErrorCode &success);
+    le_int32 layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, float x, float y, LEErrorCode &success);
 
     /**
      * This method returns the number of glyphs in the glyph array. Note
@@ -183,7 +161,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    virtual void getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const;
+    void getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const;
 
     /**
      * This method copies the character index array into a caller supplied array.
@@ -246,7 +224,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    virtual void reset();
+    void reset();
 
     /**
      * This method returns a LayoutEngine capable of laying out text
