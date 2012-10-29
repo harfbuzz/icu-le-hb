@@ -52,7 +52,9 @@ private:
 
    hb_buffer_t *fHbBuffer;
 
-    le_int32 fTypoFlags;
+   le_int32 fTypoFlags;
+
+   float x, y;
 
 #ifndef U_HIDE_INTERNAL_API
     /**
