@@ -202,12 +202,15 @@ void LayoutEngine::getGlyphPositions(float positions[], LEErrorCode &success) co
   unsigned int count;
   const hb_glyph_position_t *pos = hb_buffer_get_glyph_positions (fHbBuffer, &count);
   float x = 0, y = 0;
-  for (unsigned int i = 0; i < count; i++) {
+  unsigned int i;
+  for (i = 0; i < count; i++) {
     positions[2 * i]     = x + pos[i].x_offset;
     positions[2 * i + 1] = y + pos[i].y_offset;
     x += pos[i].x_advance;
     y += pos[i].y_advance;
   }
+  positions[2 * i]     = x;
+  positions[2 * i + 1] = y;
 }
 
 void LayoutEngine::getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const
@@ -215,8 +218,9 @@ void LayoutEngine::getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEE
   if (LE_FAILURE (success)) return;
   unsigned int count;
   const hb_glyph_position_t *pos = hb_buffer_get_glyph_positions (fHbBuffer, &count);
+  unsigned int i;
   x = 0; y = 0;
-  for (unsigned int i = 0; i < (unsigned int) glyphIndex; i++) {
+  for (i = 0; i < (unsigned int) glyphIndex; i++) {
     x += pos[i].x_advance;
     y += pos[i].y_advance;
   }
