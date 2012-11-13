@@ -261,9 +261,10 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
     this->x = x;
     this->y = y;
 
-    hb_buffer_set_length (fHbBuffer, 0);
     hb_buffer_set_direction (fHbBuffer, rightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR);
-    hb_buffer_add_utf16 (fHbBuffer, chars, max, offset, count);
+    hb_buffer_set_length (fHbBuffer, 0);
+    hb_buffer_add_utf16 (fHbBuffer, chars, max, offset, 0);
+    hb_buffer_add_utf16 (fHbBuffer, chars + offset, max - offset, 0, count);
 
     hb_shape (fHbFont, fHbBuffer, NULL, 0);
 
