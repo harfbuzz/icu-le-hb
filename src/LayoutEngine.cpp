@@ -153,8 +153,22 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
 	return;
     }
 
+#if 0
     float x_scale = fontInstance->getXPixelsPerEm () * fontInstance->getScaleFactorX ();
     float y_scale = fontInstance->getYPixelsPerEm () * fontInstance->getScaleFactorY ();
+#else
+    /* The previous block is what we actually want.  However,
+     * OpenJDK's FontInstanceAdapter::getScaleFactor[XY]() returns
+     * totally bogus numbers.  So we use transformFunits() to
+     * achieve the same.
+     */
+    unsigned int upem = fontInstance->getUnitsPerEM ();
+    /* Only support scale transforms here... FIXME? HOW? */
+    LEPoint p;
+    fontInstance->transformFunits (upem, upem, p);
+    float x_scale = p.fX;
+    float y_scale = p.fY;
+#endif
 
     hb_font_set_funcs (fHbFont, icu_le_hb_get_font_funcs (), (void *) fontInstance, NULL);
     hb_font_set_scale (fHbFont,
