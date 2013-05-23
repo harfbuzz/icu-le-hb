@@ -152,10 +152,14 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
         success = LE_MEMORY_ALLOCATION_ERROR;
 	return;
     }
+
+    float x_scale = fontInstance->getXPixelsPerEm () * fontInstance->getScaleFactorX ();
+    float y_scale = fontInstance->getYPixelsPerEm () * fontInstance->getScaleFactorY ();
+
     hb_font_set_funcs (fHbFont, icu_le_hb_get_font_funcs (), (void *) fontInstance, NULL);
     hb_font_set_scale (fHbFont,
-		       +from_float (fontInstance->getXPixelsPerEm () * fontInstance->getScaleFactorX ()),
-		       -from_float (fontInstance->getYPixelsPerEm () * fontInstance->getScaleFactorY ()));
+		       +from_float (x_scale),
+		       -from_float (y_scale));
     hb_font_set_ppem (fHbFont,
 		      fontInstance->getXPixelsPerEm (),
 		      fontInstance->getYPixelsPerEm ());
