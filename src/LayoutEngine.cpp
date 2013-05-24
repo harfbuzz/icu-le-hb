@@ -256,7 +256,29 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
     /* TODO Support features? */
     hb_shape (fHbFont, fHbBuffer, NULL, 0);
 
-    unsigned int outCount = hb_buffer_get_length (fHbBuffer);
+    /* ICU LE generates at least one glyph for each and every input 16bit codepoint.
+     * Do the same by inserting fillers. */
+    int dir   = rightToLeft ? -1 : +1;
+    int start = rightToLeft ? count - 1 : 0;
+    int end   = rightToLeft ? -1 : count;
+    int iter;
+
+    unsigned int hbCount = hb_buffer_get_length (fHbBuffer);
+    const hb_glyph_info_t *info = hb_buffer_get_glyph_infos (fHbBuffer, NULL);
+    const hb_glyph_position_t *pos = hb_buffer_get_glyph_positions (fHbBuffer, NULL);
+
+    unsigned int outCount = 0;
+    iter = start;
+    for (unsigned int i = 0; i < hbCount; i++)
+    {
+	int cluster = info[i].cluster;
+	while (iter != cluster)
+	{
+	    outCount++;
+	    iter += dir;
+	}
+    }
+    outCount += dir * (end - iter);
 
     fGlyphStorage->allocateGlyphArray (outCount, rightToLeft, success);
     fGlyphStorage->allocatePositions (success);
@@ -264,21 +286,42 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
     if (LE_FAILURE(success))
       return 0;
 
-    const hb_glyph_info_t *info = hb_buffer_get_glyph_infos (fHbBuffer, NULL);
-    const hb_glyph_position_t *pos = hb_buffer_get_glyph_positions (fHbBuffer, NULL);
-    unsigned int i;
-    for (i = 0; i < outCount; i++)
+    unsigned int j = 0;
+    iter = start;
+    for (unsigned int i = 0; i < hbCount;)
     {
-	fGlyphStorage->setGlyphID   (i, info[i].codepoint, success);
-	fGlyphStorage->setCharIndex (i, info[i].cluster, success);
-	fGlyphStorage->setPosition  (i,
-				     x + to_float (pos[i].x_offset),
-				     y + to_float (pos[i].y_offset),
-				     success);
-	x += to_float (pos[i].x_advance);
-	y += to_float (pos[i].y_advance);
+	int cluster = info[i].cluster;
+	while (iter != cluster)
+	{
+	    fGlyphStorage->setGlyphID   (j, 0xFFFF, success);
+	    fGlyphStorage->setCharIndex (j, iter, success);
+	    fGlyphStorage->setPosition  (j, x, y, success);
+	    j++;
+	    iter += dir;
+	}
+	for (; i < hbCount && info[i].cluster == cluster; i++)
+	{
+	    fGlyphStorage->setGlyphID   (j, info[i].codepoint, success);
+	    fGlyphStorage->setCharIndex (j, cluster, success);
+	    fGlyphStorage->setPosition  (j,
+					 x + to_float (pos[i].x_offset),
+					 y + to_float (pos[i].y_offset),
+					 success);
+	    j++;
+	    x += to_float (pos[i].x_advance);
+	    y += to_float (pos[i].y_advance);
+	}
+	iter += dir;
     }
-    fGlyphStorage->setPosition  (i, x, y, success);
+    while (iter != end)
+    {
+	fGlyphStorage->setGlyphID   (j, 0xFFFF, success);
+	fGlyphStorage->setCharIndex (j, iter, success);
+	fGlyphStorage->setPosition  (j, x, y, success);
+	j++;
+	iter += dir;
+    }
+    fGlyphStorage->setPosition  (j, x, y, success);
 
     hb_buffer_set_length (fHbBuffer, 0);
 
