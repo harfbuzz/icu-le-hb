@@ -287,6 +287,7 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
     hb_buffer_add_utf16 (fHbBuffer, chars, max, offset, 0);
     hb_buffer_add_utf16 (fHbBuffer, chars + offset, max - offset, 0, count);
 
+    /* TODO Support features? */
     hb_shape (fHbFont, fHbBuffer, NULL, 0);
 
     return hb_buffer_get_length (fHbBuffer);
