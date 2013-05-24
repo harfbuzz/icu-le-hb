@@ -299,7 +299,7 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
 	    j++;
 	    iter += dir;
 	}
-	for (; i < hbCount && info[i].cluster == cluster; i++)
+	for (; i < hbCount && (int) info[i].cluster == cluster; i++)
 	{
 	    fGlyphStorage->setGlyphID   (j, info[i].codepoint, success);
 	    fGlyphStorage->setCharIndex (j, cluster, success);

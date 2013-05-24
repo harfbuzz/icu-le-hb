@@ -1,5 +1,6 @@
 /*
  * (C) Copyright IBM Corp. and others 1998-2013 - All Rights Reserved
+ * (C) Copyright Google, Inc. 2012-2013 - All Rights Reserved
  */
 
 #ifndef __LAYOUTENGINE_H
