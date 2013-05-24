@@ -9,6 +9,7 @@
 #include "LEScripts.h"
 #include "LELanguages.h"
 #include "LEFontInstance.h"
+#include "LEGlyphStorage.h"
 
 #include "LayoutEngine.h"
 
@@ -130,7 +131,7 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
                            le_int32 languageCode,
                            le_int32 typoFlags,
                            LEErrorCode &success)
-  : fHbFont(NULL), fHbBuffer(NULL), fTypoFlags(typoFlags)
+  : fHbFont(NULL), fHbBuffer(NULL), fGlyphStorage (NULL), fTypoFlags(typoFlags)
 {
     if (LE_FAILURE(success)) {
         return;
@@ -149,6 +150,12 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
     fHbFont = hb_font_create (face);
     hb_face_destroy (face);
     if (fHbFont == hb_font_get_empty ()) {
+        success = LE_MEMORY_ALLOCATION_ERROR;
+	return;
+    }
+
+    fGlyphStorage = new LEGlyphStorage();
+    if (fGlyphStorage == NULL) {
         success = LE_MEMORY_ALLOCATION_ERROR;
 	return;
     }
@@ -183,6 +190,7 @@ LayoutEngine::~LayoutEngine(void)
 {
     hb_font_destroy (fHbFont);
     hb_buffer_destroy (fHbBuffer);
+    delete fGlyphStorage;
 }
 
 le_int32 LayoutEngine::getGlyphCount() const
@@ -192,73 +200,34 @@ le_int32 LayoutEngine::getGlyphCount() const
 
 void LayoutEngine::getCharIndices(le_int32 charIndices[], le_int32 indexBase, LEErrorCode &success) const
 {
-  if (LE_FAILURE (success)) return;
-  unsigned int count;
-  const hb_glyph_info_t *info = hb_buffer_get_glyph_infos (fHbBuffer, &count);
-  for (unsigned int i = 0; i < count; i++)
-    charIndices[i] = info[i].cluster + indexBase;
+  fGlyphStorage->getCharIndices(charIndices, indexBase, success);
 }
 
 void LayoutEngine::getCharIndices(le_int32 charIndices[], LEErrorCode &success) const
 {
-  if (LE_FAILURE (success)) return;
-  unsigned int count;
-  const hb_glyph_info_t *info = hb_buffer_get_glyph_infos (fHbBuffer, &count);
-  for (unsigned int i = 0; i < count; i++)
-    charIndices[i] = info[i].cluster;
+  fGlyphStorage->getCharIndices(charIndices, success);
 }
 
 // Copy the glyphs into caller's (32-bit) glyph array, OR in extraBits
 void LayoutEngine::getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const
 {
-  if (LE_FAILURE (success)) return;
-  unsigned int count;
-  const hb_glyph_info_t *info = hb_buffer_get_glyph_infos (fHbBuffer, &count);
-  for (unsigned int i = 0; i < count; i++)
-    glyphs[i] = info[i].codepoint | extraBits;
+  fGlyphStorage->getGlyphs(glyphs, extraBits, success);
 }
 
 void LayoutEngine::getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const
 {
-  if (LE_FAILURE (success)) return;
-  unsigned int count;
-  const hb_glyph_info_t *info = hb_buffer_get_glyph_infos (fHbBuffer, &count);
-  for (unsigned int i = 0; i < count; i++)
-    glyphs[i] = info[i].codepoint;
+  fGlyphStorage->getGlyphs(glyphs, success);
 }
 
 
 void LayoutEngine::getGlyphPositions(float positions[], LEErrorCode &success) const
 {
-  if (LE_FAILURE (success)) return;
-  unsigned int count;
-  const hb_glyph_position_t *pos = hb_buffer_get_glyph_positions (fHbBuffer, &count);
-  float x = this->x, y = this->y;
-  unsigned int i;
-  for (i = 0; i < count; i++) {
-    positions[2 * i]     = x + to_float (pos[i].x_offset);
-    positions[2 * i + 1] = y + to_float (pos[i].y_offset);
-    x += to_float (pos[i].x_advance);
-    y += to_float (pos[i].y_advance);
-  }
-  positions[2 * i]     = x;
-  positions[2 * i + 1] = y;
+  fGlyphStorage->getGlyphPositions(positions, success);
 }
 
 void LayoutEngine::getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const
 {
-  if (LE_FAILURE (success)) return;
-  unsigned int count;
-  const hb_glyph_position_t *pos = hb_buffer_get_glyph_positions (fHbBuffer, &count);
-  unsigned int i;
-  x = this->x;
-  y = this->y;
-  for (i = 0; i < (unsigned int) glyphIndex; i++) {
-    x += to_float (pos[i].x_advance);
-    y += to_float (pos[i].y_advance);
-  }
-  x += to_float (pos[glyphIndex].x_offset);
-  y += to_float (pos[glyphIndex].y_offset);
+  fGlyphStorage->getGlyphPosition(glyphIndex, x, y, success);
 }
 
 // Input: characters, font?
@@ -276,9 +245,6 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
         return 0;
     }
 
-    this->x = x;
-    this->y = y;
-
     hb_buffer_set_direction (fHbBuffer, rightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR);
     hb_buffer_set_length (fHbBuffer, 0);
     hb_buffer_set_flags (fHbBuffer, (hb_buffer_flags_t)
@@ -290,13 +256,38 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
     /* TODO Support features? */
     hb_shape (fHbFont, fHbBuffer, NULL, 0);
 
-    return hb_buffer_get_length (fHbBuffer);
+    unsigned int outCount = hb_buffer_get_length (fHbBuffer);
+
+    fGlyphStorage->allocateGlyphArray (outCount, rightToLeft, success);
+    fGlyphStorage->allocatePositions (success);
+
+    if (LE_FAILURE(success))
+      return 0;
+
+    const hb_glyph_info_t *info = hb_buffer_get_glyph_infos (fHbBuffer, NULL);
+    const hb_glyph_position_t *pos = hb_buffer_get_glyph_positions (fHbBuffer, NULL);
+    unsigned int i;
+    for (i = 0; i < outCount; i++)
+    {
+	fGlyphStorage->setGlyphID   (i, info[i].codepoint, success);
+	fGlyphStorage->setCharIndex (i, info[i].cluster, success);
+	fGlyphStorage->setPosition  (i,
+				     x + to_float (pos[i].x_offset),
+				     y + to_float (pos[i].y_offset),
+				     success);
+	x += to_float (pos[i].x_advance);
+	y += to_float (pos[i].y_advance);
+    }
+    fGlyphStorage->setPosition  (i, x, y, success);
+
+    hb_buffer_set_length (fHbBuffer, 0);
+
+    return fGlyphStorage->getGlyphCount();
 }
 
 void LayoutEngine::reset()
 {
-    hb_buffer_set_length (fHbBuffer, 0);
-    x = y = 0;
+    fGlyphStorage->reset ();
 }
 
 LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, LEErrorCode &success)

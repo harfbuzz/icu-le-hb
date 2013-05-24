@@ -13,7 +13,7 @@ struct hb_buffer_t;
 U_NAMESPACE_BEGIN
 
 class LEFontInstance;
-
+class LEGlyphStorage;
 
 /**
  * This is a class used to do complex text layout. The text must all
@@ -49,12 +49,9 @@ public:
 private:
 
    hb_font_t *fHbFont;
-
    hb_buffer_t *fHbBuffer;
-
+   LEGlyphStorage *fGlyphStorage;
    le_int32 fTypoFlags;
-
-   float x, y;
 
 #ifndef U_HIDE_INTERNAL_API
     /**
