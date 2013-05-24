@@ -1,6 +1,6 @@
 /*
  * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
- * (C) Copyright Google, Inc. 2012 - All Rights Reserved
+ * (C) Copyright Google, Inc. 2012-2013 - All Rights Reserved
  *
  * Google Author(s): Behdad Esfahbod
  */
