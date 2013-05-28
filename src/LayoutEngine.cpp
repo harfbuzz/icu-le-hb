@@ -142,7 +142,6 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
 	success = LE_MEMORY_ALLOCATION_ERROR;
 	return;
     }
-    hb_buffer_set_unicode_funcs (fHbBuffer, hb_icu_get_unicode_funcs ());
     hb_buffer_set_script (fHbBuffer, hb_icu_script_to_script ((UScriptCode) scriptCode));
     /* TODO set language */
 
