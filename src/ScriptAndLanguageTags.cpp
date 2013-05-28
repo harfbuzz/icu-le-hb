@@ -10,11 +10,10 @@
 
 #include "LETypes.h"
 #include "ScriptAndLanguageTags.h"
-#include "OpenTypeLayoutEngine.h"
 
 U_NAMESPACE_BEGIN
 
-const LETag OpenTypeLayoutEngine::scriptTags[] = {
+const LETag scriptTags[] = {
     zyyyScriptTag, /* 'zyyy' (COMMON) */
     zinhScriptTag, /* 'zinh' (INHERITED) */
     arabScriptTag, /* 'arab' (ARABIC) */
@@ -175,7 +174,7 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     tirhScriptTag  /* 'tirh' (TIRH) */
 };
 
-const LETag OpenTypeLayoutEngine::languageTags[] = {
+const LETag languageTags[] = {
     nullLanguageTag, /* '' (null) */
     araLanguageTag, /* 'ARA' (Arabic) */
     asmLanguageTag, /* 'ASM' (Assamese) */

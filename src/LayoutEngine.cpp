@@ -10,11 +10,12 @@
 #include "LELanguages.h"
 #include "LEFontInstance.h"
 #include "LEGlyphStorage.h"
+#include "ScriptAndLanguageTags.h"
 
 #include "LayoutEngine.h"
 
 #include <hb.h>
-#include <hb-icu.h>
+#include <hb-ot.h>
 
 #include "math.h"
 
@@ -126,6 +127,22 @@ retry:
   return ffuncs;
 }
 
+static hb_script_t
+script_to_hb (le_int32 code)
+{
+    if (code < scriptCodeCount)
+        return hb_ot_tag_to_script (scriptTags[code]);
+    return HB_SCRIPT_INVALID;
+}
+
+static hb_language_t
+language_to_hb (le_int32 code)
+{
+    if (code < languageCodeCount)
+        return hb_ot_tag_to_language (languageTags[code]);
+    return HB_LANGUAGE_INVALID;
+}
+
 LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
                            le_int32 scriptCode,
                            le_int32 languageCode,
@@ -142,8 +159,8 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
 	success = LE_MEMORY_ALLOCATION_ERROR;
 	return;
     }
-    hb_buffer_set_script (fHbBuffer, hb_icu_script_to_script ((UScriptCode) scriptCode));
-    /* TODO set language */
+    hb_buffer_set_script (fHbBuffer, script_to_hb (scriptCode));
+    hb_buffer_set_language (fHbBuffer, language_to_hb (languageCode));
 
     hb_face_t *face = hb_face_create_for_tables (icu_le_hb_reference_table, (void *) fontInstance, NULL);
     fHbFont = hb_font_create (face);

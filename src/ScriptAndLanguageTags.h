@@ -265,5 +265,8 @@ const LETag trkLanguageTag = 0x54524B20; /* 'TRK' (Turkish) */
 const LETag welLanguageTag = 0x57454C20; /* 'WEL' (Welsh) */
 
 
+extern const LETag scriptTags[];
+extern const LETag languageTags[];
+
 U_NAMESPACE_END
 #endif

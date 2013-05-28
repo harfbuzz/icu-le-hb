@@ -24,7 +24,6 @@ libicu_le_hb_la_CPPFLAGS = \
 	$(NULL)
 libicu_le_hb_la_LIBADD = \
 	$(HARFBUZZ_LIBS) \
-	$(ICU_LIBS) \
 	$(NULL)
 
 libicu_le_hb_la_SOURCES = \
@@ -34,6 +33,8 @@ libicu_le_hb_la_SOURCES = \
 	LEGlyphStorage.cpp \
 	LEInsertionList.cpp \
 	loengine.cpp \
+	ScriptAndLanguageTags.cpp \
+	ScriptAndLanguageTags.h \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
