@@ -17,7 +17,7 @@
 #include <hb.h>
 #include <hb-ot.h>
 
-#include "math.h"
+#include <math.h>
 
 U_NAMESPACE_BEGIN
 
