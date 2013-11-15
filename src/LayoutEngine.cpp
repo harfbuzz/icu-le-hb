@@ -351,7 +351,12 @@ void LayoutEngine::reset()
 LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, LEErrorCode &success)
 {
   // 3 -> kerning and ligatures
-  return LayoutEngine::layoutEngineFactory(fontInstance, scriptCode, languageCode, 3, success);
+  return LayoutEngine::layoutEngineFactory(fontInstance,
+					   scriptCode,
+					   languageCode,
+					   (LayoutEngine::kTypoFlagKern |
+					    LayoutEngine::kTypoFlagLiga),
+					   success);
 }
 
 LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags, LEErrorCode &success)
