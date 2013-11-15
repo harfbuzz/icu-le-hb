@@ -285,10 +285,13 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
 
     unsigned int outCount = 0;
     iter = start;
-    for (unsigned int i = 0; i < hbCount; i++)
+    for (unsigned int i = 0; i < hbCount;)
     {
 	int cluster = info[i].cluster;
 	outCount += dir * (cluster - iter);
+	for (; i < hbCount && (int) info[i].cluster == cluster; i++)
+	    outCount++;
+	iter += dir;
     }
     outCount += dir * (end - iter);
 
