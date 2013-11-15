@@ -150,12 +150,12 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
                            LEErrorCode &success)
     : fHbFont(NULL), fHbBuffer(NULL), fGlyphStorage (NULL), fTypoFlags(typoFlags)
 {
-    if (LE_FAILURE(success)) {
+    if (LE_FAILURE(success))
         return;
-    }
 
     fHbBuffer = hb_buffer_create ();
-    if (fHbBuffer == hb_buffer_get_empty ()) {
+    if (fHbBuffer == hb_buffer_get_empty ())
+    {
         success = LE_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -165,13 +165,15 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
     hb_face_t *face = hb_face_create_for_tables (icu_le_hb_reference_table, (void *) fontInstance, NULL);
     fHbFont = hb_font_create (face);
     hb_face_destroy (face);
-    if (fHbFont == hb_font_get_empty ()) {
+    if (fHbFont == hb_font_get_empty ())
+    {
         success = LE_MEMORY_ALLOCATION_ERROR;
         return;
     }
 
     fGlyphStorage = new LEGlyphStorage();
-    if (fGlyphStorage == NULL) {
+    if (fGlyphStorage == NULL)
+    {
         success = LE_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -252,11 +254,11 @@ void LayoutEngine::getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEE
 le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
                                    float x, float y, LEErrorCode &success)
 {
-    if (LE_FAILURE(success)) {
+    if (LE_FAILURE(success))
         return 0;
-    }
 
-    if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
+    if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max)
+    {
         success = LE_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -361,21 +363,20 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
 
 LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags, LEErrorCode &success)
 {
-    if (LE_FAILURE(success)) {
+    if (LE_FAILURE(success))
         return NULL;
-    }
 
     LayoutEngine *result = NULL;
     result = new LayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, success);
 
-    if (result && LE_FAILURE(success)) {
+    if (result && LE_FAILURE(success))
+    {
         delete result;
         result = NULL;
     }
 
-    if (result == NULL) {
+    if (result == NULL)
         success = LE_MEMORY_ALLOCATION_ERROR;
-    }
 
     return result;
 }
