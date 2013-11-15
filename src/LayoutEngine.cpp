@@ -55,11 +55,11 @@ icu_le_hb_reference_table (hb_face_t *face, hb_tag_t tag, void *user_data)
 
 static hb_bool_t
 icu_le_hb_font_get_glyph (hb_font_t *font,
-			  void *font_data,
-			  hb_codepoint_t unicode,
-			  hb_codepoint_t variation_selector,
-			  hb_codepoint_t *glyph,
-			  void *user_data)
+                          void *font_data,
+                          hb_codepoint_t unicode,
+                          hb_codepoint_t variation_selector,
+                          hb_codepoint_t *glyph,
+                          void *user_data)
 
 {
   const LEFontInstance *fontInstance = (const LEFontInstance *) font_data;
@@ -70,9 +70,9 @@ icu_le_hb_font_get_glyph (hb_font_t *font,
 
 static hb_position_t
 icu_le_hb_font_get_glyph_h_advance (hb_font_t *font,
-				    void *font_data,
-				    hb_codepoint_t glyph,
-				    void *user_data)
+                                    void *font_data,
+                                    hb_codepoint_t glyph,
+                                    void *user_data)
 {
   const LEFontInstance *fontInstance = (const LEFontInstance *) font_data;
   LEPoint advance;
@@ -84,12 +84,12 @@ icu_le_hb_font_get_glyph_h_advance (hb_font_t *font,
 
 static hb_bool_t
 icu_le_hb_font_get_glyph_contour_point (hb_font_t *font,
-				        void *font_data,
-				        hb_codepoint_t glyph,
-				        unsigned int point_index,
-				        hb_position_t *x,
-				        hb_position_t *y,
-				        void *user_data)
+                                        void *font_data,
+                                        hb_codepoint_t glyph,
+                                        unsigned int point_index,
+                                        hb_position_t *x,
+                                        hb_position_t *y,
+                                        void *user_data)
 {
   const LEFontInstance *fontInstance = (const LEFontInstance *) font_data;
   LEPoint point;
@@ -131,7 +131,7 @@ static hb_script_t
 script_to_hb (le_int32 code)
 {
     if (code < 0 || code >= scriptCodeCount)
-	return HB_SCRIPT_INVALID;
+        return HB_SCRIPT_INVALID;
     return hb_ot_tag_to_script (scriptTags[code]);
 }
 
@@ -139,7 +139,7 @@ static hb_language_t
 language_to_hb (le_int32 code)
 {
     if (code < 0 || code >= languageCodeCount)
-	return HB_LANGUAGE_INVALID;
+        return HB_LANGUAGE_INVALID;
     return hb_ot_tag_to_language (languageTags[code]);
 }
 
@@ -156,8 +156,8 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
 
     fHbBuffer = hb_buffer_create ();
     if (fHbBuffer == hb_buffer_get_empty ()) {
-	success = LE_MEMORY_ALLOCATION_ERROR;
-	return;
+        success = LE_MEMORY_ALLOCATION_ERROR;
+        return;
     }
     hb_buffer_set_script (fHbBuffer, script_to_hb (scriptCode));
     hb_buffer_set_language (fHbBuffer, language_to_hb (languageCode));
@@ -167,13 +167,13 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
     hb_face_destroy (face);
     if (fHbFont == hb_font_get_empty ()) {
         success = LE_MEMORY_ALLOCATION_ERROR;
-	return;
+        return;
     }
 
     fGlyphStorage = new LEGlyphStorage();
     if (fGlyphStorage == NULL) {
         success = LE_MEMORY_ALLOCATION_ERROR;
-	return;
+        return;
     }
 
 #if 0
@@ -195,11 +195,11 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
 
     hb_font_set_funcs (fHbFont, icu_le_hb_get_font_funcs (), (void *) fontInstance, NULL);
     hb_font_set_scale (fHbFont,
-		       +from_float (x_scale),
-		       -from_float (y_scale));
+                       +from_float (x_scale),
+                       -from_float (y_scale));
     hb_font_set_ppem (fHbFont,
-		      fontInstance->getXPixelsPerEm (),
-		      fontInstance->getYPixelsPerEm ());
+                      fontInstance->getXPixelsPerEm (),
+                      fontInstance->getYPixelsPerEm ());
 }
 
 LayoutEngine::~LayoutEngine(void)
@@ -250,7 +250,7 @@ void LayoutEngine::getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEE
 // Output: glyphs, positions, char indices
 // Returns: number of glyphs
 le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-				   float x, float y, LEErrorCode &success)
+                                   float x, float y, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;
@@ -287,11 +287,11 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
     iter = start;
     for (unsigned int i = 0; i < hbCount;)
     {
-	int cluster = info[i].cluster;
-	outCount += dir * (cluster - iter);
-	for (; i < hbCount && (int) info[i].cluster == cluster; i++)
-	    outCount++;
-	iter += dir;
+        int cluster = info[i].cluster;
+        outCount += dir * (cluster - iter);
+        for (; i < hbCount && (int) info[i].cluster == cluster; i++)
+            outCount++;
+        iter += dir;
     }
     outCount += dir * (end - iter);
 
@@ -305,36 +305,36 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
     iter = start;
     for (unsigned int i = 0; i < hbCount;)
     {
-	int cluster = info[i].cluster;
-	while (iter != cluster)
-	{
-	    fGlyphStorage->setGlyphID   (j, 0xFFFF, success);
-	    fGlyphStorage->setCharIndex (j, iter, success);
-	    fGlyphStorage->setPosition  (j, x, y, success);
-	    j++;
-	    iter += dir;
-	}
-	for (; i < hbCount && (int) info[i].cluster == cluster; i++)
-	{
-	    fGlyphStorage->setGlyphID   (j, info[i].codepoint, success);
-	    fGlyphStorage->setCharIndex (j, cluster, success);
-	    fGlyphStorage->setPosition  (j,
-					 x + to_float (pos[i].x_offset),
-					 y + to_float (pos[i].y_offset),
-					 success);
-	    j++;
-	    x += to_float (pos[i].x_advance);
-	    y += to_float (pos[i].y_advance);
-	}
-	iter += dir;
+        int cluster = info[i].cluster;
+        while (iter != cluster)
+        {
+            fGlyphStorage->setGlyphID   (j, 0xFFFF, success);
+            fGlyphStorage->setCharIndex (j, iter, success);
+            fGlyphStorage->setPosition  (j, x, y, success);
+            j++;
+            iter += dir;
+        }
+        for (; i < hbCount && (int) info[i].cluster == cluster; i++)
+        {
+            fGlyphStorage->setGlyphID   (j, info[i].codepoint, success);
+            fGlyphStorage->setCharIndex (j, cluster, success);
+            fGlyphStorage->setPosition  (j,
+                                         x + to_float (pos[i].x_offset),
+                                         y + to_float (pos[i].y_offset),
+                                         success);
+            j++;
+            x += to_float (pos[i].x_advance);
+            y += to_float (pos[i].y_advance);
+        }
+        iter += dir;
     }
     while (iter != end)
     {
-	fGlyphStorage->setGlyphID   (j, 0xFFFF, success);
-	fGlyphStorage->setCharIndex (j, iter, success);
-	fGlyphStorage->setPosition  (j, x, y, success);
-	j++;
-	iter += dir;
+        fGlyphStorage->setGlyphID   (j, 0xFFFF, success);
+        fGlyphStorage->setCharIndex (j, iter, success);
+        fGlyphStorage->setPosition  (j, x, y, success);
+        j++;
+        iter += dir;
     }
     fGlyphStorage->setPosition  (j, x, y, success);
 
@@ -352,11 +352,11 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
 {
   // 3 -> kerning and ligatures
   return LayoutEngine::layoutEngineFactory(fontInstance,
-					   scriptCode,
-					   languageCode,
-					   (LayoutEngine::kTypoFlagKern |
-					    LayoutEngine::kTypoFlagLiga),
-					   success);
+                                           scriptCode,
+                                           languageCode,
+                                           (LayoutEngine::kTypoFlagKern |
+                                            LayoutEngine::kTypoFlagLiga),
+                                           success);
 }
 
 LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags, LEErrorCode &success)
@@ -369,9 +369,9 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
     result = new LayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, success);
 
     if (result && LE_FAILURE(success)) {
-		delete result;
-		result = NULL;
-	}
+                delete result;
+                result = NULL;
+        }
 
     if (result == NULL) {
         success = LE_MEMORY_ALLOCATION_ERROR;
