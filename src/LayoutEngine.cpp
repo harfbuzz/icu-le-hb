@@ -291,6 +291,7 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
     {
         int cluster = info[i].cluster;
         outCount += dir * (cluster - iter);
+        iter = cluster;
         for (; i < hbCount && (int) info[i].cluster == cluster; i++)
             outCount++;
         iter += dir;
