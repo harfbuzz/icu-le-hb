@@ -6,7 +6,6 @@ includedir=@includedir@
 Name: icu-le-hb
 Description: ICU Layout Engine API on top of HarfBuzz shaping library
 Version: @VERSION@
-Requires.private: harfbuzz
-Requires.private: icu-uc
+Requires.private: harfbuzz icu-uc
 Libs: -L${libdir} -licu-le-hb
 Cflags: -I${includedir}/icu-le-hb
