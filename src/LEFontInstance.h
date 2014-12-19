@@ -163,7 +163,17 @@ public:
      *
      * @stable ICU 2.8
      */
-    virtual const void *getFontTable(LETag tableTag) const = 0;
+    /*
+     * IMPORTANT (icu-le-hb):
+     *
+     * We intentionally do NOT provide this method.  No client should use this.
+     * It's a huge security risk to use it.  Implement getFontTable(LETag, size_t&) instead.
+     *
+     * See:
+     * http://site.icu-project.org/download/51#TOC-Known-Issues
+     * http://www.icu-project.org/trac/ticket/11450
+     */
+    //virtual const void *getFontTable(LETag tableTag) const = 0;
 
     /**
      * This method reads a table from the font. Note that in general,
@@ -182,7 +192,17 @@ public:
      *         if the table doesn't exist.
      * @internal
      */
-    virtual const void* getFontTable(LETag tableTag, size_t &length) const { length=-1; return getFontTable(tableTag); }  /* -1 = unknown length */
+    /*
+     * IMPORTANT (icu-le-hb):
+     *
+     * We do not provide a default implementation of this method.  All clients must
+     * implement it.
+     *
+     * See:
+     * http://site.icu-project.org/download/51#TOC-Known-Issues
+     * http://www.icu-project.org/trac/ticket/11450
+     */
+    virtual const void* getFontTable(LETag tableTag, size_t &length) const = 0;// { length=-1; return getFontTable(tableTag); }  /* -1 = unknown length */
 
     /**
      * This method is used to determine if the font can
