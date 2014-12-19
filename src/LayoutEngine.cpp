@@ -32,13 +32,13 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LayoutEngine)
 static inline float
 to_float (hb_position_t v)
 {
-    return scalblnf (v, -12);
+    return scalbnf (v, -12);
 }
 
 static inline hb_position_t
 from_float (float v)
 {
-    return scalblnf (v, +12);
+    return scalbnf (v, +12);
 }
 
 
