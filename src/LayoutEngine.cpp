@@ -268,6 +268,7 @@ le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_
     hb_buffer_set_flags (fHbBuffer, (hb_buffer_flags_t)
                          ((offset == 0 ? HB_BUFFER_FLAG_BOT : 0) |
                           (offset + count == max ? HB_BUFFER_FLAG_EOT : 0)));
+    hb_buffer_set_cluster_level (fHbBuffer, HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS);
     hb_buffer_add_utf16 (fHbBuffer, (const uint16_t*)chars, max, offset, 0);
     hb_buffer_add_utf16 (fHbBuffer, (const uint16_t*)(chars + offset), max - offset, 0, count);
 
