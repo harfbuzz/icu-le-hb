@@ -1,1 +1,4 @@
-Not much.
+1.0.3
+=====
+
+- Produce fine-grained cluster values, close to what icu-le does.
