@@ -33,6 +33,7 @@ libicu_le_hb_la_SOURCES = \
 	LEGlyphStorage.cpp \
 	LEInsertionList.cpp \
 	loengine.cpp \
+	OpenTypeLayoutEngine.h \
 	ScriptAndLanguageTags.cpp \
 	ScriptAndLanguageTags.h \
 	$(NULL)

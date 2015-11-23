@@ -11,6 +11,7 @@
 #include "LEFontInstance.h"
 #include "LEGlyphStorage.h"
 #include "ScriptAndLanguageTags.h"
+#include "OpenTypeLayoutEngine.h"
 
 #include "LayoutEngine.h"
 
@@ -132,7 +133,7 @@ script_to_hb (le_int32 code)
 {
     if (code < 0 || code >= scriptCodeCount)
         return HB_SCRIPT_INVALID;
-    return hb_ot_tag_to_script (scriptTags[code]);
+    return hb_ot_tag_to_script (OpenTypeLayoutEngine::scriptTags[code]);
 }
 
 static hb_language_t
@@ -140,7 +141,7 @@ language_to_hb (le_int32 code)
 {
     if (code < 0 || code >= languageCodeCount)
         return HB_LANGUAGE_INVALID;
-    return hb_ot_tag_to_language (languageTags[code]);
+    return hb_ot_tag_to_language (OpenTypeLayoutEngine::languageTags[code]);
 }
 
 LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
