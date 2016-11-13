@@ -24,6 +24,7 @@ libicu_le_hb_la_CPPFLAGS = \
 	$(NULL)
 libicu_le_hb_la_LIBADD = \
 	$(HARFBUZZ_LIBS) \
+	$(ICU_LIBS) \
 	$(NULL)
 
 libicu_le_hb_la_SOURCES = \
