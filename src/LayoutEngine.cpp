@@ -66,7 +66,7 @@ icu_le_hb_font_get_glyph (hb_font_t *font,
     const LEFontInstance *fontInstance = (const LEFontInstance *) font_data;
 
     *glyph = fontInstance->mapCharToGlyph (unicode);
-    return !!glyph;
+    return !!*glyph;
 }
 
 static hb_position_t
