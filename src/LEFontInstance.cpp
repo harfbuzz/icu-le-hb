@@ -79,7 +79,7 @@ void LEFontInstance::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, 
 
 LEGlyphID LEFontInstance::mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const
 {
-    return mapCharToGlyph(ch, mapper, TRUE);
+    return mapCharToGlyph(ch, mapper, true);
 }
 
 LEGlyphID LEFontInstance::mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper, le_bool filterZeroWidth) const

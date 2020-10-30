@@ -86,11 +86,11 @@ le_bool LEInsertionList::applyInsertions(LEInsertionCallback *callback)
 {
     for (InsertionRecord *rec = head; rec != NULL; rec = rec->next) {
         if (callback->applyInsertion(rec->position, rec->count, rec->glyphs)) {
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 U_NAMESPACE_END

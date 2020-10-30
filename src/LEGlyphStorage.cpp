@@ -659,7 +659,7 @@ le_bool LEGlyphStorage::applyInsertion(le_int32 atPosition, le_int32 count, LEGl
     // just got replaced by the insertion
     fSrcIndex -= 1;
 
-    return FALSE;
+    return false;
 }
 
 U_NAMESPACE_END
