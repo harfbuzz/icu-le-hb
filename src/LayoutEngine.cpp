@@ -58,7 +58,6 @@ static hb_bool_t
 icu_le_hb_font_get_glyph (hb_font_t *font,
                           void *font_data,
                           hb_codepoint_t unicode,
-                          hb_codepoint_t variation_selector,
                           hb_codepoint_t *glyph,
                           void *user_data)
 
@@ -113,7 +112,7 @@ retry:
     if (!ffuncs) {
         /* Only pseudo-thread-safe... */
         hb_font_funcs_t *f = hb_font_funcs_create ();
-        hb_font_funcs_set_glyph_func (f, icu_le_hb_font_get_glyph, NULL, NULL);
+        hb_font_funcs_set_nominal_glyph_func (f, icu_le_hb_font_get_glyph, NULL, NULL);
         hb_font_funcs_set_glyph_h_advance_func (f, icu_le_hb_font_get_glyph_h_advance, NULL, NULL);
         hb_font_funcs_set_glyph_contour_point_func (f, icu_le_hb_font_get_glyph_contour_point, NULL, NULL);
 
