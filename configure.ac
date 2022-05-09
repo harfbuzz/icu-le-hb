@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to create configure.
 AC_PREREQ(2.56)
 
-AC_INIT(icu-le-hb, 1.0.3)
+AC_INIT(icu-le-hb, 1.2.3)
 
 AC_CONFIG_MACRO_DIR([m4])
 

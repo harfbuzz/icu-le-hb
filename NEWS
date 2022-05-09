@@ -1,3 +1,9 @@
+1.2.3
+=====
+
+- Update scripts and languages for upstream changes (Unicode 9ish).
+- Fix build with ICU 68.1+.
+
 1.0.3
 =====
 
