@@ -66,7 +66,7 @@ public:
         const le_uint8 *p = reinterpret_cast<const le_uint8 *>(&value);
         return (le_uint16)((p[0] << 8) | p[1]);
 #endif
-    };
+    }
 
     /**
      * Reads a big-endian 32-bit word and returns a native-endian value.
@@ -90,7 +90,7 @@ public:
         const le_uint8 *p = reinterpret_cast<const le_uint8 *>(&value);
         return (le_uint32)((p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3]);
 #endif
-    };
+    }
 
 private:
     LESwaps() {} // private - forbid instantiation
