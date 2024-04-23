@@ -97,7 +97,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    ~LayoutEngine();
+    ~LayoutEngine() override;
 
     /**
      * This method will invoke the layout steps in their correct order by calling
@@ -255,7 +255,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    virtual UClassID getDynamicClassID() const;
+    UClassID getDynamicClassID() const override;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.

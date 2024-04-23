@@ -107,7 +107,7 @@ protected:
      *
      * @stable ICU 3.0
      */
-    virtual le_bool applyInsertion(le_int32 atPosition, le_int32 count, LEGlyphID newGlyphs[]);
+    le_bool applyInsertion(le_int32 atPosition, le_int32 count, LEGlyphID newGlyphs[]) override;
 
 public:
 
@@ -125,7 +125,7 @@ public:
      *
      * @stable ICU 3.0
      */
-    ~LEGlyphStorage();
+    ~LEGlyphStorage() override;
 
     /**
      * This method returns the number of glyphs in the glyph array.
@@ -520,7 +520,7 @@ public:
      *
      * @stable ICU 3.0
      */
-    virtual UClassID getDynamicClassID() const;
+    UClassID getDynamicClassID() const override;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.

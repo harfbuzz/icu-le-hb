@@ -88,7 +88,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    virtual ~LEFontInstance();
+    ~LEFontInstance() override;
 
     /**
      * Get a physical font which can render the given text. For composite fonts,
@@ -539,7 +539,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual UClassID getDynamicClassID() const;
+    UClassID getDynamicClassID() const override;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
