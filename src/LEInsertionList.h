@@ -76,7 +76,7 @@ public:
     /**
      * The destructor.
      */
-    ~LEInsertionList();
+    ~LEInsertionList() override;
 
     /**
      * Add an entry to the insertion list.
@@ -128,7 +128,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    virtual UClassID getDynamicClassID() const;
+    UClassID getDynamicClassID() const override;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
