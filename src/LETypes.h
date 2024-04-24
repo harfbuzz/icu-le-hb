@@ -7,6 +7,8 @@
 #ifndef __LETYPES_H
 #define __LETYPES_H
 
+#include <stdint.h>
+
 #if !defined(LE_USE_CMEMORY) && (defined(U_LAYOUT_IMPLEMENTATION) || defined(U_LAYOUTEX_IMPLEMENTATION) || defined(U_STATIC_IMPLEMENTATION) || defined(U_COMBINED_IMPLEMENTATION))
 #define LE_USE_CMEMORY
 #endif
@@ -302,7 +304,7 @@ typedef struct LEPoint LEPoint;
 /**
  * Range check for overflow
  */
-#define LE_RANGE_CHECK(type, count, ptrfn) (( (LE_UINTPTR_MAX / sizeof(type)) < (count) ) ? NULL : (ptrfn))
+#define LE_RANGE_CHECK(type, count, ptrfn) (( (count) < 0 || (LE_UINTPTR_MAX / sizeof(type)) < (uintptr_t)(count) ) ? NULL : (ptrfn))
 /**
  * A convenience macro to get the length of an array.
  *
