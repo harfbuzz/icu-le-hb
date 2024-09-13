@@ -54,79 +54,6 @@ icu_le_hb_reference_table (hb_face_t *face, hb_tag_t tag, void *user_data)
     return hb_blob_create (data, length, HB_MEMORY_MODE_READONLY, NULL, NULL);
 }
 
-static hb_bool_t
-icu_le_hb_font_get_glyph (hb_font_t *font,
-                          void *font_data,
-                          hb_codepoint_t unicode,
-                          hb_codepoint_t *glyph,
-                          void *user_data)
-
-{
-    const LEFontInstance *fontInstance = (const LEFontInstance *) font_data;
-
-    *glyph = fontInstance->mapCharToGlyph (unicode);
-    return !!*glyph;
-}
-
-static hb_position_t
-icu_le_hb_font_get_glyph_h_advance (hb_font_t *font,
-                                    void *font_data,
-                                    hb_codepoint_t glyph,
-                                    void *user_data)
-{
-    const LEFontInstance *fontInstance = (const LEFontInstance *) font_data;
-    LEPoint advance;
-
-    fontInstance->getGlyphAdvance (glyph, advance);
-
-    return from_float (advance.fX);
-}
-
-static hb_bool_t
-icu_le_hb_font_get_glyph_contour_point (hb_font_t *font,
-                                        void *font_data,
-                                        hb_codepoint_t glyph,
-                                        unsigned int point_index,
-                                        hb_position_t *x,
-                                        hb_position_t *y,
-                                        void *user_data)
-{
-    const LEFontInstance *fontInstance = (const LEFontInstance *) font_data;
-    LEPoint point;
-
-    if (!fontInstance->getGlyphPoint (glyph, point_index, point))
-        return false;
-
-    *x = from_float (point.fX);
-    *y = from_float (point.fY);
-
-    return true;
-}
-
-static hb_font_funcs_t *
-icu_le_hb_get_font_funcs (void)
-{
-    static hb_font_funcs_t *ffuncs = NULL;
-
-retry:
-    if (!ffuncs) {
-        /* Only pseudo-thread-safe... */
-        hb_font_funcs_t *f = hb_font_funcs_create ();
-        hb_font_funcs_set_nominal_glyph_func (f, icu_le_hb_font_get_glyph, NULL, NULL);
-        hb_font_funcs_set_glyph_h_advance_func (f, icu_le_hb_font_get_glyph_h_advance, NULL, NULL);
-        hb_font_funcs_set_glyph_contour_point_func (f, icu_le_hb_font_get_glyph_contour_point, NULL, NULL);
-
-        if (!ffuncs)
-            ffuncs = f;
-        else {
-            hb_font_funcs_destroy (f);
-            goto retry;
-        }
-    }
-
-    return ffuncs;
-}
-
 static hb_script_t
 script_to_hb (le_int32 code)
 {
@@ -195,7 +122,6 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance,
     float y_scale = p.fY;
 #endif
 
-    hb_font_set_funcs (fHbFont, icu_le_hb_get_font_funcs (), (void *) fontInstance, NULL);
     hb_font_set_scale (fHbFont,
                        +from_float (x_scale),
                        -from_float (y_scale));
