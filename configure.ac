@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to create configure.
 AC_PREREQ(2.56)
 
-AC_INIT(icu-le-hb, 1.2.3)
+AC_INIT(icu-le-hb, 2.0.0)
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -15,7 +15,7 @@ AC_PROG_CXX
 AX_CXX_COMPILE_STDCXX(11)
 AM_PROG_LIBTOOL
 
-PKG_CHECK_MODULES(HARFBUZZ, harfbuzz >= 1.2.3)
+PKG_CHECK_MODULES(HARFBUZZ, harfbuzz >= 2.0.0)
 PKG_CHECK_MODULES(ICU, icu-uc)
 
 AC_CONFIG_FILES([

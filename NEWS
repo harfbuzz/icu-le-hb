@@ -1,3 +1,11 @@
+2.0.0
+=====
+
+- Rely on HarfBuzz’s hb-ot-font for mapping characters to glyph indices, and
+  getting glyph advances.
+- Raise minimum required HarfBuzz version to 2.0.0.
+- Various compiler warning fixes.
+
 1.2.3
 =====
 
