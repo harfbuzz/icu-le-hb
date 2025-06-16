@@ -8,19 +8,13 @@
 #define __LETYPES_H
 
 #include <stdint.h>
-
-#if !defined(LE_USE_CMEMORY) && (defined(U_LAYOUT_IMPLEMENTATION) || defined(U_LAYOUTEX_IMPLEMENTATION) || defined(U_STATIC_IMPLEMENTATION) || defined(U_COMBINED_IMPLEMENTATION))
-#define LE_USE_CMEMORY
-#endif
+#include <stdlib.h>
+#include <string.h>
 
 #include "unicode/utypes.h"
 
 #ifdef __cplusplus
 #include "unicode/uobject.h"
-#endif
-
-#ifdef LE_USE_CMEMORY
-#include "cmemory.h"
 #endif
 
 /*!
@@ -312,50 +306,6 @@ typedef struct LEPoint LEPoint;
  */
 #define LE_ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
-#ifdef LE_USE_CMEMORY
-/**
- * A convenience macro for copying an array.
- *
- * @internal
- */
-#define LE_ARRAY_COPY(dst, src, count) uprv_memcpy((void *) (dst), (void *) (src), (count) * sizeof (src)[0])
-
-/**
- * Allocate an array of basic types. This is used to isolate the rest of
- * the LayoutEngine code from cmemory.h.
- *
- * @internal
- */
-#define LE_NEW_ARRAY(type, count) (type *)  LE_RANGE_CHECK(type,count,uprv_malloc((count) * sizeof(type)))
-
-/**
- * Re-allocate an array of basic types. This is used to isolate the rest of
- * the LayoutEngine code from cmemory.h.
- *
- * @internal
- */
-#define LE_GROW_ARRAY(array, newSize) uprv_realloc((void *) (array), (newSize) * sizeof (array)[0])
-
- /**
- * Free an array of basic types. This is used to isolate the rest of
- * the LayoutEngine code from cmemory.h.
- *
- * @internal
- */
-#define LE_DELETE_ARRAY(array) uprv_free((void *) (array))
-#else
-
-/* Not using ICU memory - use C std lib versions */
-
-#include <stdlib.h>
-#include <string.h>
-
-/**
- * A convenience macro to get the length of an array.
- *
- * @internal
- */
-#define LE_ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
 /**
  * A convenience macro for copying an array.
@@ -365,30 +315,26 @@ typedef struct LEPoint LEPoint;
 #define LE_ARRAY_COPY(dst, src, count) memcpy((void *) (dst), (void *) (src), (count) * sizeof (src)[0])
 
 /**
- * Allocate an array of basic types. This is used to isolate the rest of
- * the LayoutEngine code from cmemory.h.
+ * Allocate an array of basic types.
  *
  * @internal
  */
 #define LE_NEW_ARRAY(type, count) LE_RANGE_CHECK(type,count,(type *) malloc((count) * sizeof(type)))
 
 /**
- * Re-allocate an array of basic types. This is used to isolate the rest of
- * the LayoutEngine code from cmemory.h.
+ * Re-allocate an array of basic types.
  *
  * @internal
  */
 #define LE_GROW_ARRAY(array, newSize) realloc((void *) (array), (newSize) * sizeof (array)[0])
 
  /**
- * Free an array of basic types. This is used to isolate the rest of
- * the LayoutEngine code from cmemory.h.
+ * Free an array of basic types.
  *
  * @internal
  */
 #define LE_DELETE_ARRAY(array) free((void *) (array))
 
-#endif
 #endif  /* U_HIDE_INTERNAL_API */
 
 /**
